@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>欢乐贵州 9天7晚</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#1e4d40">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="欢乐贵州">
+<style>
+:root{
+  --bg:#e9efeb; --surface:#f8fbf8; --surface2:#e1eae5; --ink:#18241f; --muted:#5a6a63;
+  --jade:#1e4d40; --on-jade:#f3f8f5; --jade-soft:#d3e3da; --gold:#c28d0e; --gold-soft:#f6e7bd;
+  --warn:#a8461f; --warn-soft:#f6ddd0; --line:#d3ddd7;
+  --m1:#b9cbc2; --m2:#8fab9e; --m3:#5d8070;
+  --serif:"Songti SC","STSong","Noto Serif SC","Noto Serif CJK SC","Source Han Serif SC",serif;
+  --sans:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1513; --surface:#15201c; --surface2:#1d2b26; --ink:#e4ebe7; --muted:#93a59d;
+    --jade:#7cc4a6; --on-jade:#0d1513; --jade-soft:#1d3a30; --gold:#e8b93a; --gold-soft:#3a2f12;
+    --warn:#ec8a5f; --warn-soft:#3b2117; --line:#26352f;
+    --m1:#1a2924; --m2:#20352d; --m3:#28463a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1513; --surface:#15201c; --surface2:#1d2b26; --ink:#e4ebe7; --muted:#93a59d;
+  --jade:#7cc4a6; --on-jade:#0d1513; --jade-soft:#1d3a30; --gold:#e8b93a; --gold-soft:#3a2f12;
+  --warn:#ec8a5f; --warn-soft:#3b2117; --line:#26352f;
+  --m1:#1a2924; --m2:#20352d; --m3:#28463a;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px calc(96px + env(safe-area-inset-bottom,0px))}
+h1,h2,h3{font-family:var(--serif);margin:0;line-height:1.25;font-weight:900}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--jade)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.muted{color:var(--muted)} .small{font-size:13px}
+.num{font-variant-numeric:tabular-nums}
+
+/* offline bar */
+.offline{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;margin:0 -16px;background:var(--gold-soft);color:var(--ink);text-align:center;font-size:13px;padding:6px 12px;display:none}
+.offline.on{display:block}
+
+/* page title (non-today views) */
+.ptitle{padding:20px 2px 4px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.ptitle h1{font-size:28px}
+.ptitle span{font-size:13px;color:var(--muted)}
+
+/* hero */
+.hero{position:relative;margin:0 -16px;padding:18px 18px 0;overflow:hidden}
+.hero .code{font-size:12px;color:var(--muted)}
+.hero h1{font-size:34px;letter-spacing:.06em;margin-top:2px}
+.hero .sub{color:var(--muted);font-size:14px}
+.hero svg{display:block;width:calc(100% + 36px);margin:6px -18px 0;height:56px}
+
+/* status */
+.status{background:var(--jade);color:var(--on-jade);border-radius:22px;padding:18px 20px;margin-top:-4px}
+.status .row{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.status .big{font-family:var(--serif);font-size:52px;font-weight:900;line-height:1}
+.status .lbl{font-size:14px;opacity:.85}
+.status .r{text-align:right}
+.track{height:6px;border-radius:6px;background:rgba(127,127,127,.28);overflow:hidden;margin-top:14px}
+.track i{display:block;height:100%;background:var(--gold);border-radius:6px;transition:width .4s}
+
+/* quick actions */
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.quick a,.quick button{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 4px;text-decoration:none;color:var(--ink);font-size:13px}
+.quick svg{width:22px;height:22px;stroke:var(--jade)}
+
+section{margin-top:24px}
+.sh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:0 2px 10px}
+.sh h2{font-size:19px}
+.sh span{font-size:12.5px;color:var(--muted);text-align:right}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px}
+.card+.card{margin-top:10px}
+
+/* day card */
+.dayhead{display:flex;gap:14px;align-items:center}
+.dayhead .n{flex:0 0 auto;width:54px;height:54px;border-radius:16px;background:var(--gold-soft);display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:22px;color:var(--gold)}
+.dayhead h3{font-size:19px}
+.hl{display:block;margin-top:12px;font-size:13.5px;color:var(--muted);padding-left:10px;border-left:3px solid var(--gold)}
+.tl{list-style:none;margin:16px 0 0;padding:0}
+.tl li{display:grid;grid-template-columns:64px 1fr;gap:8px;position:relative;padding-bottom:12px;font-size:15px}
+.tl li::before{content:"";position:absolute;left:68px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--jade)}
+.tl li::after{content:"";position:absolute;left:71px;top:18px;bottom:0;width:1px;background:var(--line)}
+.tl li:last-child{padding-bottom:0}
+.tl li:last-child::after{display:none}
+.tl b{font-size:13px;color:var(--jade);font-weight:600;padding-top:1px}
+.tl span{padding-left:16px}
+.meals{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}
+.meals div{background:var(--surface2);border-radius:12px;padding:7px 10px;font-size:13.5px}
+.meals small{display:block;color:var(--muted);font-size:11.5px}
+.hotel{display:flex;gap:10px;align-items:center;margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--jade-soft)}
+.hotel svg{flex:0 0 20px;width:20px;height:20px;stroke:var(--jade)}
+.hotel small{display:block;font-size:11.5px;color:var(--muted)}
+.fc{display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 12px;border-radius:12px;border:1px dashed var(--line);font-size:14px}
+.fc .e{font-size:24px;line-height:1}
+.tips{margin:14px 0 0;padding:0;list-style:none}
+.tips li{position:relative;padding:0 0 0 22px;font-size:14px}
+.tips li+li{margin-top:7px}
+.tips li::before{content:"";position:absolute;left:3px;top:8px;width:8px;height:8px;border-radius:2px;background:var(--gold);transform:rotate(45deg)}
+.links{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.links a,.pill{flex:1 1 auto;text-align:center;text-decoration:none;font-size:13.5px;border-radius:12px;padding:9px 12px;background:var(--surface2);color:var(--ink);border:0}
+.links a.pri,.pill.pri{background:var(--jade);color:var(--on-jade)}
+.alert{background:var(--warn-soft);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:12px}
+.alert b{color:var(--warn)}
+
+/* weather */
+.wx{display:flex;align-items:center;gap:14px}
+.wx .e{font-size:44px;line-height:1}
+.wx .t{font-family:var(--serif);font-size:38px;font-weight:900;line-height:1}
+.hours{display:flex;gap:6px;overflow-x:auto;margin:14px -16px 0;padding:0 16px 2px;scrollbar-width:none}
+.hours::-webkit-scrollbar{display:none}
+.hours div{flex:0 0 50px;text-align:center;background:var(--surface2);border-radius:12px;padding:7px 0;font-size:12px}
+.hours div b{display:block;font-size:17px;line-height:1.5}
+.hours div i{display:block;font-style:normal;color:var(--jade);font-size:11px}
+
+/* chips */
+.chips{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 16px;margin:0 -16px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:6px 0;width:58px;text-align:center}
+.chip b{display:block;font-family:var(--serif);font-size:17px}
+.chip span{font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:var(--on-jade)}
+.chip[aria-pressed="true"] span{color:inherit;opacity:.85}
+.chip.now{border-color:var(--gold);border-width:2px}
+
+/* rows */
+.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.kv:last-child{border:0;padding-bottom:0}
+.kv:first-child{padding-top:0}
+.kv>span:first-child{color:var(--muted);flex:0 0 auto}
+.kv>span:last-child{text-align:right}
+
+/* checklist */
+.packtop{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:6px 0 10px}
+details.grp{background:var(--surface);border:1px solid var(--line);border-radius:18px;margin-top:10px;overflow:hidden}
+details.grp summary{list-style:none;display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer}
+details.grp summary::-webkit-details-marker{display:none}
+details.grp summary h3{font-size:16px}
+details.grp summary .cnt{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+details.grp summary .cnt::after{content:"";width:8px;height:8px;border:solid var(--muted);border-width:0 2px 2px 0;transform:rotate(45deg);transition:transform .2s;margin-top:-4px}
+details.grp[open] summary .cnt::after{transform:rotate(-135deg);margin-top:4px}
+details.grp .done{color:var(--jade);font-weight:600}
+.items{padding:0 16px 6px}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--line);cursor:pointer}
+.chk input{appearance:none;-webkit-appearance:none;flex:0 0 22px;height:22px;border:2px solid var(--m3);border-radius:7px;margin:1px 0 0;display:grid;place-items:center;cursor:pointer;background:var(--surface)}
+.chk input:checked{background:var(--jade);border-color:var(--jade)}
+.chk input:checked::after{content:"";width:6px;height:11px;border:solid var(--surface);border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.chk .t{font-size:15px}
+.chk .d{display:block;font-size:12.5px;color:var(--muted)}
+.chk input:checked + span .t{text-decoration:line-through;color:var(--muted)}
+.inp{width:100%;font:inherit;font-size:16px;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.row2{display:flex;gap:8px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 14px;font-size:14px;flex:0 0 auto}
+.btn.pri{background:var(--jade);color:var(--on-jade);border-color:var(--jade)}
+
+/* info accordions */
+details.info{background:var(--surface);border:1px solid var(--line);border-radius:18px;margin-top:10px}
+details.info summary{list-style:none;display:flex;gap:12px;align-items:center;padding:14px 16px;cursor:pointer}
+details.info summary::-webkit-details-marker{display:none}
+details.info summary .ic{font-size:20px}
+details.info summary h3{font-size:16px;flex:1}
+details.info summary::after{content:"";width:8px;height:8px;border:solid var(--muted);border-width:0 2px 2px 0;transform:rotate(45deg);transition:transform .2s;margin-top:-4px}
+details.info[open] summary::after{transform:rotate(-135deg);margin-top:4px}
+details.info .body{padding:0 16px 16px;font-size:15px}
+details.info .body p{margin:0 0 8px}
+details.info .body p:last-child{margin:0}
+
+/* boarding pass */
+.pass{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.pass+.pass{margin-top:10px}
+.pass .top{display:flex;justify-content:space-between;padding:10px 16px;background:var(--jade);color:var(--on-jade);font-size:13px}
+.pass .route{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 16px;text-align:center}
+.pass .ap{font-family:var(--serif);font-size:30px;font-weight:900;line-height:1.1}
+.pass .tm{font-size:16px;font-weight:600}
+.pass .cy{font-size:12px;color:var(--muted)}
+.pass .mid{color:var(--muted);font-size:12px;padding:0 6px}
+.pass .foot{border-top:1px dashed var(--line);padding:10px 16px;font-size:13.5px}
+
+/* tools */
+.conv-top{display:flex;justify-content:space-between;align-items:center}
+.swap{border:1px solid var(--line);background:var(--surface2);border-radius:20px;padding:6px 12px;font-size:13px}
+.conv-in{display:flex;align-items:center;gap:8px;margin-top:12px;border-bottom:2px solid var(--jade);padding-bottom:4px}
+.conv-in span{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--muted)}
+.conv-in input{flex:1;min-width:0;border:0;background:none;font:inherit;font-family:var(--serif);font-size:36px;font-weight:900;color:var(--ink);padding:0;outline:none}
+.conv-out{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.conv-out div{background:var(--surface2);border-radius:12px;padding:10px 12px}
+.conv-out small{display:block;color:var(--muted);font-size:12px}
+.conv-out b{font-family:var(--serif);font-size:22px}
+.qamt{display:flex;gap:6px;margin-top:10px}
+.qamt button{flex:1;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 0;font-size:13px}
+.rate{margin-top:12px;font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.rate b{color:var(--ink);font-weight:600}
+.cats{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.cats button{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:6px 12px;font-size:13px}
+.cats button[aria-pressed="true"]{background:var(--jade);color:var(--on-jade);border-color:var(--jade)}
+.sumbar{display:flex;height:10px;border-radius:6px;overflow:hidden;margin-top:12px;background:var(--surface2)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
+.dgroup{margin-top:14px}
+.dgroup h4{margin:0 0 4px;font-size:13px;color:var(--muted);font-weight:600;display:flex;justify-content:space-between}
+.exp-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:15px}
+.exp-item .x{border:0;background:none;color:var(--muted);padding:2px 6px;font-size:14px}
+textarea.inp{resize:vertical;min-height:140px;line-height:1.6}
+
+/* nav */
+nav{position:fixed;left:0;right:0;bottom:0;z-index:25;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+nav a{text-decoration:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;font-size:11.5px}
+nav a svg{width:22px;height:22px;stroke:currentColor}
+nav a[aria-current="page"]{color:var(--jade);font-weight:700}
+nav a[aria-current="page"] svg{stroke-width:2.3}
+.view{display:none}
+.view.on{display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 7V5a3 3 0 0 1 6 0v2M4 12h16"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></symbol>
+    <symbol id="i-tool" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M16 15v2"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linejoin="round"><path d="M4 18.5 5.3 15A8 8 0 1 1 9 18.7L4 18.5z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></symbol>
+    <symbol id="i-bed" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="1.6"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+<div class="offline" id="offline">离线中：行程照常可看，天气和汇率用上次更新的资料</div>
+
+<!-- ========== 今天 ========== -->
+<div class="view" id="v-today">
+  <header class="hero">
+    <div class="code">团号 261105#KWE09-07FY</div>
+    <h1>欢乐贵州</h1>
+    <div class="sub">9天7晚　11月5日至13日</div>
+    <svg viewBox="0 0 400 56" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="var(--m1)" d="M0 30 Q20 6 38 26 Q52 0 70 24 Q86 -4 104 22 Q120 8 138 26 Q156 0 176 24 Q196 6 214 26 Q232 -2 252 22 Q270 8 288 26 Q306 2 326 24 Q346 6 362 26 Q382 2 400 22 V56 H0Z"/>
+      <path fill="var(--m2)" d="M0 40 Q18 18 34 38 Q50 10 70 36 Q88 22 104 40 Q124 14 144 38 Q164 24 182 40 Q200 14 222 38 Q242 24 260 40 Q280 12 300 38 Q320 24 340 40 Q360 16 380 38 Q392 30 400 34 V56 H0Z"/>
+      <path fill="var(--m3)" d="M0 50 Q30 38 58 48 Q80 34 110 46 Q140 38 168 50 Q196 36 228 48 Q258 40 286 50 Q318 36 348 48 Q376 40 400 46 V56 H0Z"/>
+    </svg>
+  </header>
+  <div class="status" id="status"></div>
+  <div class="quick">
+    <a href="https://chat.whatsapp.com/CE5IOGqE3B2GvAWTFlsLno?s=cl&p=a&iam=2" target="_blank" rel="noopener"><svg><use href="#i-chat"/></svg>团友群</a>
+    <a href="#tools" data-focus="expAmt"><svg><use href="#i-plus"/></svg>记一笔</a>
+    <a href="#tools" data-focus="convIn"><svg><use href="#i-swap"/></svg>换算</a>
+  </div>
+  <div id="todayBody"></div>
+</div>
+
+<!-- ========== 行程 ========== -->
+<div class="view" id="v-plan">
+  <div class="ptitle"><h1>每日行程</h1><span>金色框是今天</span></div>
+  <div class="chips" id="chips" role="group" aria-label="选择日期"></div>
+  <div id="dayDetail" style="margin-top:6px"></div>
+  <section>
+    <div class="sh"><h2>住宿一览</h2></div>
+    <div class="card" id="hotelList"></div>
+  </section>
+</div>
+
+<!-- ========== 清单 ========== -->
+<div class="view" id="v-pack">
+  <div class="ptitle"><h1>准备清单</h1><span id="packCount"></span></div>
+  <div class="packtop"><div class="track" style="margin-top:4px"><i id="packBar"></i></div></div>
+  <div id="packList"></div>
+  <div class="row2" style="margin-top:14px">
+    <input class="inp" id="newItem" placeholder="自己加一项，例如：零食">
+    <button class="btn pri" id="addItem">加入</button>
+  </div>
+  <div style="margin-top:12px;text-align:right"><button class="btn" id="resetPack">全部取消勾选</button></div>
+</div>
+
+<!-- ========== 须知 ========== -->
+<div class="view" id="v-info">
+  <div class="ptitle"><h1>旅行须知</h1><span>与新马无时差</span></div>
+
+  <section style="margin-top:10px">
+    <div class="pass">
+      <div class="top"><span>去程　FY8840 飞萤航空</span><span>11月5日 周四</span></div>
+      <div class="route">
+        <div><div class="ap">JHB</div><div class="tm num">19:35</div><div class="cy">新山士乃</div></div>
+        <div class="mid">约 5 小时<br>✈</div>
+        <div><div class="ap">KWE</div><div class="tm num">00:25 +1</div><div class="cy">贵阳龙洞堡</div></div>
+      </div>
+      <div class="foot"><b>16:30 MarryBrown 门口集合</b>。各自前往机场，先到的在门口等，到齐后领队带大家一起 Check-in，之后自由活动，按指定时间到登机口集合。</div>
+    </div>
+    <div class="pass">
+      <div class="top"><span>回程　FY8841 飞萤航空</span><span>11月13日 周五</span></div>
+      <div class="route">
+        <div><div class="ap">KWE</div><div class="tm num">01:25</div><div class="cy">贵阳龙洞堡</div></div>
+        <div class="mid">约 5 小时<br>✈</div>
+        <div><div class="ap">JHB</div><div class="tm num">06:10</div><div class="cy">新山士乃</div></div>
+      </div>
+      <div class="foot">凌晨起飞，所以 <b>12日晚上</b>就要到机场，约 23:00 前。</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>联系人</h2></div>
+    <div class="card">
+      <div class="kv"><span>领队</span><span>Mr. Aaron　<span class="num">019-709 0633</span></span></div>
+      <div class="kv"><span>旅行社</span><span>Feliz Travel & Tours</span></div>
+      <div class="kv"><span>办公室</span><span class="num">+607-585 7322</span></div>
+      <div class="kv"><span>电邮</span><span>tours@feliztravel.com</span></div>
+      <div class="kv"><span>中国紧急电话</span><span>报警 110　急救 120　火警 119</span></div>
+      <div class="links">
+        <a class="pri" href="https://chat.whatsapp.com/CE5IOGqE3B2GvAWTFlsLno?s=cl&p=a&iam=2" target="_blank" rel="noopener" style="flex-basis:100%">打开团友 WhatsApp 群</a>
+        <a href="https://wa.me/60197090633" target="_blank" rel="noopener">WhatsApp Aaron</a>
+        <a href="https://wa.me/60127123066" target="_blank" rel="noopener">WhatsApp 旅行社</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>出发前看一遍</h2><span>点开看详情</span></div>
+    <details class="info"><summary><span class="ic">🧳</span><h3>行李规定</h3></summary><div class="body">
+      <p><b>手提 ≤ 7kg</b>，尺寸 56 × 36 × 23 cm；<b>托运 ≤ 20kg</b> 每人。</p>
+      <p>随身液体每瓶不超过 100ml，超过的放托运。</p>
+      <p>充电宝只能放手提，容量标识要清楚（建议 ≤ 100Wh），标签模糊的在中国机场可能被没收。</p>
+      <p>个人药品放随身包，不要托运。</p>
+    </div></details>
+    <details class="info"><summary><span class="ic">🛂</span><h3>护照与入境</h3></summary><div class="body">
+      <p>护照有效期要到 <b>2027年5月13日</b> 之后，有空白页、干净无污迹。</p>
+      <p>入境中国的电子二维码由公司代填，领队会发给大家，收到后截图存好。</p>
+    </div></details>
+    <details class="info"><summary><span class="ic">🧥</span><h3>天气与穿着</h3></summary><div class="body">
+      <div class="kv"><span>贵阳</span><span>15–18°C</span></div>
+      <div class="kv"><span>遵义</span><span>13–18°C</span></div>
+      <div class="kv"><span>镇宁（安顺）</span><span>16–22°C</span></div>
+      <div class="kv"><span>兴义</span><span>15–22°C</span></div>
+      <p class="small muted" style="margin-top:10px">以上是旅行社给的大概温度，实时天气看“今天”页和每天的行程卡。比新加坡冷很多又常下雨，用洋葱式穿法：发热衣 + 长袖 + 防风外套/薄羽绒，配运动鞋和雨伞。</p>
+    </div></details>
+    <details class="info"><summary><span class="ic">💴</span><h3>钱与付款</h3></summary><div class="body">
+      <p>当地用<b>人民币</b>，可带少量新币/马币备用。</p>
+      <p>大部分地方用手机付款：支付宝（绑定银行卡）或 TNG eWallet。</p>
+      <p>夜市、小摊偶尔只收现金，身上留些零钱。</p>
+    </div></details>
+    <details class="info"><summary><span class="ic">📶</span><h3>上网与插头</h3></summary><div class="body">
+      <p>中国内地连不上 WhatsApp、Google 等。用<b>漫游或 eSIM 流量</b>通常可以照常用，酒店 Wi-Fi 不行。</p>
+      <p>中国插座是两扁脚 / 三斜脚，新加坡插头插不进，要带转换插头。</p>
+    </div></details>
+    <details class="info"><summary><span class="ic">🛡️</span><h3>保险与登机牌</h3></summary><div class="body">
+      <p>检查保单上的名字和证件号码。</p>
+      <p><b>来回登机牌都要保留</b>到回家之后，保险索赔要用。</p>
+    </div></details>
+    <details class="info"><summary><span class="ic">🛍️</span><h3>购物说明</h3></summary><div class="body">
+      <p>部分景区内有卖土特产的摊位，不算购物站，没兴趣可以直接到景区外集合点等。导游介绍的特产按喜好买就好。</p>
+    </div></details>
+    <div class="alert"><b>待确认</b>　Day 7 酒店：住宿表写“贵阳温德姆花园酒店”，行程表写“贵阳善润云庭酒店”。另外行程表的英文星期全部差一天，以中文星期为准。</div>
+  </section>
+</div>
+
+<!-- ========== 工具 ========== -->
+<div class="view" id="v-tools">
+  <div class="ptitle"><h1>工具</h1></div>
+
+  <section style="margin-top:10px">
+    <div class="card">
+      <div class="conv-top"><h2 style="font-size:18px">汇率换算</h2><button class="swap" id="swap">⇄ <span id="swapLbl"></span></button></div>
+      <div class="conv-in"><span id="inSym">¥</span><input id="convIn" type="number" inputmode="decimal" placeholder="0" aria-label="输入金额"></div>
+      <div class="qamt" id="qamt"></div>
+      <div class="conv-out" id="convOut"></div>
+      <div class="rate"><span id="rateLine"></span><span id="rateTime"></span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>旅行记账</h2><span id="expTotal"></span></div>
+    <div class="card">
+      <div class="row2">
+        <input class="inp" id="expAmt" type="number" inputmode="decimal" placeholder="¥ 金额" style="flex:0 0 38%">
+        <input class="inp" id="expNote" placeholder="备注，例如：烤鸭">
+      </div>
+      <div class="cats" id="expCats"></div>
+      <button class="btn pri" id="expAdd" style="margin-top:10px;width:100%">记下这笔</button>
+      <div id="expSum"></div>
+      <div id="expList"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>旅行笔记</h2><span>自动保存</span></div>
+    <textarea class="inp" id="notes" placeholder="想买的手信、想吃的店、酒店房号……"></textarea>
+  </section>
+</div>
+</div>
+
+<nav aria-label="主要导航"><div class="in">
+  <a href="#today" data-v="today"><svg><use href="#i-sun"/></svg>今天</a>
+  <a href="#plan" data-v="plan"><svg><use href="#i-map"/></svg>行程</a>
+  <a href="#pack" data-v="pack"><svg><use href="#i-bag"/></svg>清单</a>
+  <a href="#info" data-v="info"><svg><use href="#i-info"/></svg>须知</a>
+  <a href="#tools" data-v="tools"><svg><use href="#i-tool"/></svg>工具</a>
+</div></nav>
+
+<script>
+/* ---------- storage ---------- */
+function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function $(id){return document.getElementById(id)}
+
+/* ---------- data ---------- */
+var DAYS=[
+ {n:1,d:5,wk:"周四",route:"新山 → 贵阳",temp:"15–18°C",
+  items:[["13:30","建议这时从新加坡出发过长堤"],["16:30","士乃机场 MarryBrown 门口集合，到齐后领队带大家一起 Check-in"],["","办完自由活动，按领队指定时间到登机口集合"],["19:35","FY8840 起飞"],["00:25","抵达贵阳，接机后入住酒店"]],
+  hotel:"贵阳温德姆花园酒店",meals:["—","—","—"],hl:"",
+  tips:["16:30 准时在 MarryBrown 门口集合，周四下午长堤也会塞，宁可早到","出门前再检查一次护照！","入境电子二维码先截图存好，入境时出示","个人药品放随身包，不要托运","手提行李里放一件外套，半夜落地气温约 13–15°C","登机牌拍照并收好，保险索赔要用","落地后先跟家人报平安（确认漫游/eSIM 能上网）"]},
+ {n:2,d:6,wk:"周五",route:"贵阳 → 遵义",temp:"13–18°C",
+  items:[["早餐后","车赴遵义，约 2 小时"],["","乌江寨景区 + 环保车 + 苗服拍照"],["","独竹漂"],["晚上","民俗活动、无人机表演、篝火晚会、音乐喷泉（以景区当日为准）"]],
+  hotel:"乌江寨沐山酒店",meals:["酒店","黔北风味","廻龙宴"],hl:"中国十佳旅游目的地之一",
+  tips:["今天换酒店，早上收好行李","晚上活动都在户外，山区夜里凉，带外套","苗服拍照前先想好造型，记得充满电"]},
+ {n:3,d:7,wk:"周六",route:"遵义 → 镇宁",temp:"16–22°C",
+  items:[["早餐后","车赴安顺，约 3 小时"],["","天龙屯堡 + 环保车 + 地戏表演"],["","安顺古城文化街"],["","独家体验休闲下午茶"]],
+  hotel:"凌悦大酒店",meals:["酒店","夜郎风味","黔菜风味"],hl:"石头建筑绝唱：天龙屯堡",
+  tips:["今天换酒店，早上收好行李","车程 3 小时，容易晕车的出发前吃药","地戏是戴面具的传统戏，值得看完整场"]},
+ {n:4,d:8,wk:"周日",route:"镇宁",temp:"16–22°C",
+  items:[["早餐后","黄果树景区 + 环保车 + 双程扶梯"],["","陡坡塘瀑布"],["","水帘洞"]],
+  hotel:"凌悦大酒店（连住）",meals:["酒店","花开富贵宴","药膳风味"],hl:"亚洲最大瀑布：黄果树瀑布",
+  tips:["水帘洞和瀑布旁水雾很大：雨衣、手机防水袋、防滑鞋","台阶和步行很多，穿最好走的鞋","连住同一家酒店，不用收行李"]},
+ {n:5,d:9,wk:"周一",route:"镇宁 → 盘州 → 兴义",temp:"15–22°C",
+  items:[["早餐后","车赴盘州，约 2.5 小时"],["","妥乐古银杏 + 环保车，小桥流水、树王"],["","车赴兴义，约 1.5 小时"],["","贵州醇景区"],["晚上","星光夜市打卡"]],
+  hotel:"峰林湖大酒店",meals:["酒店","农家风味","烤鸭风味"],hl:"世界古银杏之乡（11月初至中下旬赏银杏）",
+  tips:["今天换酒店，早上收好行李","刚好是银杏季，整趟最值得拍照的一天","车程合计约 4 小时，带零食和水","夜市准备手机支付和一点现金"]},
+ {n:6,d:10,wk:"周二",route:"兴义",temp:"15–22°C",
+  items:[["早餐后","万峰湖 + 游船"],["","独家游览吉隆堡 + 摆渡车（霍格沃茨风格古建筑）"],["","万峰林景区 + 八卦田 + 电瓶车"],["","球幕影院"]],
+  hotel:"峰林湖大酒店（连住）",meals:["酒店","鱼宴风味","兴义烤鸭"],hl:"中国最美五大峰林：万峰林；高原平湖明珠：万峰湖",
+  tips:["湖上游船风大，多带一件外套","连住同一家酒店，不用收行李","万峰林看八卦田的视角最好，留意导游说的观景点"]},
+ {n:7,d:11,wk:"周三",route:"兴义 → 贵阳",temp:"15–18°C",
+  items:[["早餐后","马岭河大峡谷 + 天星画廊 + 上下电梯"],["","车赴贵阳，约 4.5 小时"],["","服务区打卡世界第一高桥：花江峡谷大桥（不上桥）"],["晚上","白宫夜景、青云市集"]],
+  hotel:"贵阳善润云庭酒店",meals:["酒店","峡谷风味","粤菜风味"],hl:"地球最美伤疤：马岭河大峡谷",
+  warn:"住宿表写的是“贵阳温德姆花园酒店”，跟 Aaron 确认是哪一家。",
+  tips:["今天换酒店，早上收好行李","峡谷步道潮湿，穿防滑鞋","今天车程最长，晕车药、充电宝、零食都带上车"]},
+ {n:8,d:12,wk:"周四",route:"贵阳",temp:"15–18°C",
+  items:[["早餐后","退房，青岩古镇 + 环保车"],["","夜郎谷景区"],["","花溪黄金大道（赏枫叶）"],["","自由活动"],["晚餐后","送机，约 23:00 前到机场"]],
+  hotel:"今晚不住酒店，直接去机场",meals:["酒店","状元蹄","侗家风味"],hl:"贵州四大古镇之首：青岩古镇",
+  tips:["早上退房，行李全部收好上车","液体、手信酱料放托运，手提别超 7kg","最后的人民币可在古镇买手信用掉","外套和充电宝放手提"]},
+ {n:9,d:13,wk:"周五",route:"贵阳 → 新山",temp:"",
+  items:[["01:25","FY8841 起飞"],["06:10","抵达士乃机场"],["","过长堤回新加坡"]],
+  hotel:"回家",meals:["—","—","—"],hl:"",
+  tips:["周五早上长堤是上班高峰，预留时间，或考虑当天请假","来回登机牌留到确定不需要索赔为止","通宵飞机，回家先补眠"]}
+];
+
+var PACK=[
+ {c:"出发前要办",items:[
+  ["护照有效期到 2027年5月13日之后","有空白页、没有污迹"],
+  ["确认入境签证要求","新马护照目前一般免签，以旅行社为准"],
+  ["兑换人民币现金","少量就好，大部分用手机付款"],
+  ["设置支付宝并绑定银行卡","或给 TNG eWallet 先充值"],
+  ["开通漫游或买中国 eSIM","才能在内地用 WhatsApp / Google"],
+  ["下载高德地图、翻译 App",""],
+  ["检查保单名字和证件号码",""],
+  ["请假：5日下午 + 考虑 13日","5日傍晚要过长堤，13日清晨才落地"],
+  ["规划去士乃机场的交通","16:30 MarryBrown 门口集合，建议 13:30 前从新加坡出发"],
+  ["通知银行会在海外刷卡",""],
+  ["护照、保单拍照存在手机和云端",""],
+  ["把领队 Aaron 电话存进通讯录","019-709 0633"],
+  ["跟 Aaron 确认 Day 7 酒店",""],
+  ["行李称重","手提 ≤7kg，托运 ≤20kg"],
+  ["收到入境电子二维码后截图保存","公司代填，领队会发给大家"]]},
+ {c:"证件与钱",items:[["护照",""],["人民币现金",""],["少量马币","新山机场来回交通用"],["新币备用",""],["银行卡",""],["保单 / 行程单（电子或打印）",""]]},
+ {c:"衣物（13–22°C，会下雨）",items:[["发热衣 ×2",""],["长袖上衣 ×5",""],["长裤 ×4",""],["防风外套 / 薄羽绒",""],["防滑运动鞋","黄果树、马岭河步道湿滑"],["拖鞋",""],["雨衣","水帘洞、瀑布旁会湿"],["折叠雨伞",""],["帽子、围巾、手套",""],["睡衣",""],["内衣、袜子 ×9",""]]},
+ {c:"电子产品",items:[["转换插头","中国是两扁脚/三斜脚"],["充电宝（放手提）","标识清楚，≤100Wh"],["手机充电线 + 充电头",""],["耳机","长途车用"],["手机防水袋",""],["相机 / 存储卡",""]]},
+ {c:"药品与洗漱",items:[["个人药品","放随身包，不要托运"],["晕车药","多段 2–4.5 小时山路车程"],["肠胃药、止痛药",""],["唇膏、护手霜","贵州天气比较干冷"],["牙刷牙膏","部分酒店不主动提供"],["纸巾、湿纸巾","景区厕所常没纸"],["口罩",""],["液体分装 ≤100ml",""]]},
+ {c:"每天出门随身",items:[["护照",""],["手机 + 充电宝",""],["纸巾",""],["雨伞",""],["外套",""],["水",""]]}
+];
+
+var LOC={gy:{n:"贵阳",la:26.65,lo:106.63},zy:{n:"遵义",la:27.70,lo:106.93},as:{n:"安顺",la:26.25,lo:105.95},
+ zn:{n:"镇宁黄果树",la:25.99,lo:105.67},pz:{n:"盘州",la:25.71,lo:104.47},xy:{n:"兴义",la:25.09,lo:104.90}};
+var LKEYS=Object.keys(LOC);
+var LIVE=[
+ {l:"gy",s:"龙洞堡国际机场",f:"FY8840"},{l:"zy",s:"乌江寨景区"},{l:"as",s:"天龙屯堡"},{l:"zn",s:"黄果树景区"},
+ {l:"pz",s:"妥乐古银杏"},{l:"xy",s:"万峰林景区"},{l:"xy",s:"马岭河大峡谷"},{l:"gy",s:"青岩古镇"},{l:"gy",s:"龙洞堡国际机场",f:"FY8841"}];
+
+var checked=load("gz-pack",{}), custom=load("gz-custom",[]);
+
+/* ---------- helpers ---------- */
+function todayIndex(){var n=new Date();var t=new Date(n.getFullYear(),n.getMonth(),n.getDate());return Math.round((t-new Date(2026,10,5))/86400000)}
+function ago(t){if(!t)return"";var m=Math.round((Date.now()-t)/60000);if(m<1)return"刚刚";if(m<60)return m+" 分钟前";var h=Math.round(m/60);if(h<48)return h+" 小时前";return Math.round(h/24)+" 天前"}
+function bing(q){return"https://cn.bing.com/search?q="+encodeURIComponent(q)}
+
+/* ---------- weather ---------- */
+var WX=load("gz-wx",null);
+function wxIcon(c){if(c===0)return["☀️","晴"];if(c<=2)return["🌤️","少云"];if(c===3)return["☁️","阴"];if(c<=48)return["🌫️","雾"];
+  if(c<=57)return["🌦️","毛毛雨"];if(c<=67)return["🌧️","雨"];if(c<=77)return["🌨️","雪"];if(c<=82)return["🌦️","阵雨"];return["⛈️","雷雨"]}
+function fetchWx(){
+  if(!navigator.onLine||(WX&&Date.now()-WX.t<30*60000))return;
+  var url="https://api.open-meteo.com/v1/forecast?latitude="+LKEYS.map(function(k){return LOC[k].la}).join(",")+
+    "&longitude="+LKEYS.map(function(k){return LOC[k].lo}).join(",")+
+    "&current=temperature_2m,weather_code,apparent_temperature&hourly=temperature_2m,precipitation_probability,weather_code"+
+    "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunset&timezone=Asia%2FShanghai&forecast_days=16";
+  fetch(url).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(arr){
+    if(!Array.isArray(arr))arr=[arr];var d={};LKEYS.forEach(function(k,i){d[k]=arr[i]});
+    WX={t:Date.now(),d:d};save("gz-wx",WX);route(true);
+  }).catch(function(){});
+}
+function dayFc(D){
+  var key=LIVE[D.n-1].l,L=LOC[key];
+  if(!WX)return'<div class="fc small muted"><span class="e">🌦️</span>连上网络后显示这天的天气预报</div>';
+  var w=WX.d[key],ds="2026-11-"+(D.d<10?"0":"")+D.d,i=w&&w.daily?w.daily.time.indexOf(ds):-1;
+  if(i<0)return'<div class="fc small muted"><span class="e">🌦️</span>'+L.n+'：离这天 16 天内才有预报</div>';
+  var ic=wxIcon(w.daily.weather_code[i]);
+  return'<div class="fc"><span class="e">'+ic[0]+'</span><span><b class="num">'+L.n+'　'+Math.round(w.daily.temperature_2m_min[i])+'–'+Math.round(w.daily.temperature_2m_max[i])+'°C</b>　'+ic[1]+'，降雨 '+w.daily.precipitation_probability_max[i]+'%<br><span class="small muted">预报更新于 '+ago(WX.t)+'</span></span></div>';
+}
+function nowWx(key){
+  var L=LOC[key];
+  if(!WX)return'<section><div class="sh"><h2>'+L.n+'天气</h2></div><div class="card small muted">连上网络后显示实时天气，之后离线也能看上次的资料。</div></section>';
+  var w=WX.d[key],c=w.current,ic=wxIcon(c.weather_code),now=c.time.slice(0,13);
+  var hi=Math.max(0,w.hourly.time.findIndex(function(t){return t.slice(0,13)>=now})),hs='';
+  for(var j=hi;j<hi+12&&j<w.hourly.time.length;j++)hs+='<div>'+w.hourly.time[j].slice(11,13)+'时<b>'+wxIcon(w.hourly.weather_code[j])[0]+'</b><span class="num">'+Math.round(w.hourly.temperature_2m[j])+'°</span><i>💧'+w.hourly.precipitation_probability[j]+'%</i></div>';
+  return'<section><div class="sh"><h2>'+L.n+'天气</h2><span>'+(navigator.onLine?'更新于 ':'离线，资料来自 ')+ago(WX.t)+'</span></div><div class="card">'+
+    '<div class="wx"><span class="e">'+ic[0]+'</span><div><div class="t num">'+Math.round(c.temperature_2m)+'°C</div><div class="small muted">'+ic[1]+'，体感 '+Math.round(c.apparent_temperature)+'°C　日落 '+w.daily.sunset[0].slice(11)+'</div></div></div>'+
+    '<div class="hours">'+hs+'</div></div></section>';
+}
+
+/* ---------- exchange rate (1 SGD / 1 MYR in CNY) ---------- */
+var FX=load("gz-fx",{sgd:5.5,myr:1.65,t:0});
+function fetchFx(){
+  if(!navigator.onLine||(FX.t&&Date.now()-FX.t<60*60000))return;
+  fetch("https://api.frankfurter.app/latest?from=SGD&to=CNY,MYR").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+    return{sgd:j.rates.CNY,myr:j.rates.CNY/j.rates.MYR,src:"欧洲央行"};
+  }).catch(function(){
+    return fetch("https://open.er-api.com/v6/latest/SGD").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+      return{sgd:j.rates.CNY,myr:j.rates.CNY/j.rates.MYR,src:"ExchangeRate-API"};});
+  }).then(function(r){if(!r||!(r.sgd>0)||!(r.myr>0))return;FX={sgd:r.sgd,myr:r.myr,src:r.src,t:Date.now()};save("gz-fx",FX);renderConv();renderExp();}).catch(function(){});
+}
+var convMode=load("gz-convmode","cny"); // cny | sgd | myr
+var MODES={cny:{sym:"¥",lbl:"人民币 → 新币/马币",q:[10,50,100,500]},sgd:{sym:"S$",lbl:"新币 → 人民币",q:[10,50,100,200]},myr:{sym:"RM",lbl:"马币 → 人民币",q:[10,50,100,200]}};
+function f2(n){return n.toLocaleString("zh-CN",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function renderConv(){
+  var M=MODES[convMode],v=parseFloat($("convIn").value)||0;
+  $("inSym").textContent=M.sym;$("swapLbl").textContent=M.lbl;
+  $("qamt").innerHTML=M.q.map(function(a){return'<button data-a="'+a+'">'+M.sym+a+'</button>'}).join("");
+  $("qamt").querySelectorAll("button").forEach(function(b){b.onclick=function(){$("convIn").value=b.dataset.a;renderConv()}});
+  var o;
+  if(convMode==="cny")o='<div><small>新币</small><b class="num">S$'+f2(v/FX.sgd)+'</b></div><div><small>马币</small><b class="num">RM'+f2(v/FX.myr)+'</b></div>';
+  else{var cny=v*(convMode==="sgd"?FX.sgd:FX.myr);o='<div style="grid-column:1/-1"><small>人民币</small><b class="num">¥'+f2(cny)+'</b></div>';}
+  $("convOut").innerHTML=o;
+  $("rateLine").innerHTML='1 新币 = <b class="num">¥'+FX.sgd.toFixed(3)+'</b>　1 马币 = <b class="num">¥'+FX.myr.toFixed(3)+'</b>';
+  $("rateTime").textContent=FX.t?((navigator.onLine?"更新于 ":"离线，用 ")+ago(FX.t)+(navigator.onLine?"":"的汇率")):"预设估算，连网后自动更新";
+}
+$("swap").onclick=function(){var k=["cny","sgd","myr"];convMode=k[(k.indexOf(convMode)+1)%3];save("gz-convmode",convMode);$("convIn").value="";renderConv()};
+$("convIn").oninput=renderConv;
+
+/* ---------- day card ---------- */
+function dayCard(D){
+  var h='<div class="card"><div class="dayhead"><span class="n">D'+D.n+'</span><div><h3>'+esc(D.route)+'</h3><div class="small muted">11月'+D.d+'日　'+D.wk+'</div></div></div>';
+  if(D.hl)h+='<span class="hl">'+esc(D.hl)+'</span>';
+  h+='<ul class="tl">';D.items.forEach(function(i){h+='<li><b class="num">'+esc(i[0]||"")+'</b><span>'+esc(i[1])+'</span></li>'});h+='</ul>';
+  h+=dayFc(D);
+  if(D.meals[1]!=="—")h+='<div class="meals"><div><small>早餐</small>'+esc(D.meals[0])+'</div><div><small>午餐</small>'+esc(D.meals[1])+'</div><div><small>晚餐</small>'+esc(D.meals[2])+'</div></div>';
+  h+='<div class="hotel"><svg><use href="#i-bed"/></svg><div><small>今晚</small><b>'+esc(D.hotel)+'</b></div></div>';
+  if(D.warn)h+='<div class="alert"><b>待确认</b>　'+esc(D.warn)+'</div>';
+  h+='<ul class="tips">'+D.tips.map(function(t){return'<li>'+esc(t)+'</li>'}).join("")+'</ul>';
+  var L=LIVE[D.n-1];h+='<div class="links">';
+  h+=L.f?'<a href="'+bing(L.f+" 航班动态")+'" target="_blank" rel="noopener">✈️ '+L.f+' 航班动态</a>':'<a href="'+bing(L.s+" 今日 公告")+'" target="_blank" rel="noopener">📢 景区公告</a>';
+  h+='<a href="https://uri.amap.com/search?keyword='+encodeURIComponent(L.s)+'" target="_blank" rel="noopener">📍 '+esc(L.s)+'</a></div>';
+  return h+'</div>';
+}
+
+/* ---------- checklist ---------- */
+function allItems(){var a=[];PACK.forEach(function(g,gi){g.items.forEach(function(it,ii){a.push({id:gi+"-"+ii,t:it[0],d:it[1],g:gi})})});custom.forEach(function(c,ci){a.push({id:"c-"+ci,t:c,d:"",g:-1})});return a}
+function packStats(){var a=allItems(),n=a.filter(function(x){return checked[x.id]}).length;return{n:n,t:a.length}}
+function chkRow(x){return'<label class="chk"><input type="checkbox" data-id="'+x.id+'"'+(checked[x.id]?' checked':'')+'><span><span class="t">'+esc(x.t)+'</span>'+(x.d?'<span class="d">'+esc(x.d)+'</span>':'')+'</span></label>'}
+function bindChk(root,rerender){root.querySelectorAll('input[type=checkbox]').forEach(function(cb){cb.onchange=function(){if(cb.checked)checked[cb.dataset.id]=1;else delete checked[cb.dataset.id];save("gz-pack",checked);rerender()}})}
+var openGrp=load("gz-open",{0:1});
+function renderPack(){
+  var a=allItems(),h='',groups=PACK.map(function(g,gi){return{name:g.c,gi:gi}});
+  if(custom.length)groups.push({name:"我加的",gi:-1});
+  groups.forEach(function(g){var its=a.filter(function(x){return x.g===g.gi}),done=its.filter(function(x){return checked[x.id]}).length;
+    h+='<details class="grp" data-g="'+g.gi+'"'+(openGrp[g.gi]?' open':'')+'><summary><h3>'+esc(g.name)+'</h3><span class="cnt'+(done===its.length?' done':'')+'">'+(done===its.length?'完成 ':'')+done+'/'+its.length+'</span></summary><div class="items">'+its.map(chkRow).join("")+'</div></details>'});
+  var el=$("packList");el.innerHTML=h;
+  el.querySelectorAll("details").forEach(function(d){d.ontoggle=function(){if(d.open)openGrp[d.dataset.g]=1;else delete openGrp[d.dataset.g];save("gz-open",openGrp)}});
+  bindChk(el,renderPack);
+  var s=packStats();$("packCount").textContent="完成 "+s.n+" / "+s.t;$("packBar").style.width=(s.t?s.n/s.t*100:0)+"%";
+}
+$("addItem").onclick=function(){var v=$("newItem").value.trim();if(!v)return;custom.push(v);save("gz-custom",custom);openGrp[-1]=1;$("newItem").value="";renderPack()};
+$("newItem").onkeydown=function(e){if(e.key==="Enter")$("addItem").click()};
+$("resetPack").onclick=function(){if(confirm("确定把所有勾选清掉？")){checked={};save("gz-pack",checked);renderPack()}};
+
+/* ---------- today ---------- */
+function renderToday(){
+  var i=todayIndex(),ps=packStats(),st=$("status"),body=$("todayBody"),h='';
+  if(i<0){
+    st.innerHTML='<div class="row"><div><div class="lbl">距离出发</div><div class="big num">'+(-i)+' 天</div></div><div class="lbl r">11月5日 16:30<br>士乃机场 MarryBrown 集合</div></div>'+
+      '<div class="track"><i style="width:'+(ps.t?ps.n/ps.t*100:0)+'%"></i></div><div class="lbl" style="margin-top:6px">准备清单完成 '+ps.n+' / '+ps.t+'</div>';
+    var todo=PACK[0].items.map(function(it,ii){return{id:"0-"+ii,t:it[0],d:it[1]}}).filter(function(x){return!checked[x.id]});
+    h+='<section><div class="sh"><h2>出发前还要办</h2><span>'+(todo.length?todo.length+' 项':'')+'</span></div><div class="card">';
+    if(!todo.length)h+='<p style="margin:0">出发前的事都办好了，接着去收行李吧。</p>';
+    else h+='<div style="margin:-11px 0 -6px">'+todo.slice(0,5).map(chkRow).join("").replace('class="chk"','class="chk" style="border-top:0"')+'</div>';
+    if(todo.length>5)h+='<p class="small muted" style="margin:12px 0 0">还有 '+(todo.length-5)+' 项，<a href="#pack">看完整清单</a></p>';
+    h+='</div></section><section><div class="sh"><h2>出发当天</h2></div>'+dayCard(DAYS[0])+'</section>';
+    body.innerHTML=h;bindChk(body,renderToday);
+  }else if(i<=8){
+    var D=DAYS[i];
+    st.innerHTML='<div class="row"><div><div class="lbl">今天是第</div><div class="big num">'+D.n+' 天</div></div><div class="lbl r">'+esc(D.route)+'<br>今晚：'+esc(D.hotel.replace("（连住）",""))+'</div></div>'+
+      '<div class="track"><i style="width:'+(D.n/9*100)+'%"></i></div><div class="lbl" style="margin-top:6px">共 9 天，第 '+D.n+' 天</div>';
+    h+=nowWx(LIVE[i].l);
+    if(i===7)h+='<div class="alert"><b>今晚去机场</b>　FY8841 凌晨 01:25 起飞，晚餐后约 23:00 前到机场。登机牌记得留着。</div>';
+    h+='<section><div class="sh"><h2>今天的行程</h2></div>'+dayCard(D)+'</section>';
+    if(i<8){var N=DAYS[i+1];h+='<section><div class="sh"><h2>明天提醒</h2><span>D'+N.n+'　'+esc(N.route)+'</span></div><div class="card"><ul class="tips" style="margin:0">'+N.tips.map(function(t){return'<li>'+esc(t)+'</li>'}).join("")+'</ul></div></section>';}
+    h+='<section><div class="card small"><b>每天出门随身</b>：护照、手机、充电宝、纸巾、雨伞、外套、水。<br>领队 Aaron：<span class="num">019-709 0633</span></div></section>';
+    body.innerHTML=h;
+  }else{
+    st.innerHTML='<div class="big" style="font-size:38px">欢迎回家</div><div class="lbl" style="margin-top:8px">贵州 9 天 7 晚之旅结束了</div>';
+    body.innerHTML='<section><div class="card"><p style="margin:0 0 6px">来回登机牌留到确定不需要保险索赔为止。</p><p style="margin:0">这趟花了多少，看 <a href="#tools">工具</a> 页的记账。</p></div></section>';
+  }
+}
+
+/* ---------- plan ---------- */
+var sel=Math.min(Math.max(todayIndex(),0),8);
+function renderPlan(){
+  var ti=todayIndex(),c=$("chips");
+  c.innerHTML=DAYS.map(function(D,i){return'<button class="chip'+(i===ti?' now':'')+'" aria-pressed="'+(i===sel)+'" data-i="'+i+'"><b>D'+D.n+'</b><span>11/'+D.d+' '+D.wk+'</span></button>'}).join("");
+  c.querySelectorAll(".chip").forEach(function(b){b.onclick=function(){sel=+b.dataset.i;renderPlan()}});
+  $("dayDetail").innerHTML=dayCard(DAYS[sel]);
+  $("hotelList").innerHTML=DAYS.slice(0,7).map(function(D){return'<div class="kv"><span>D'+D.n+'　11/'+D.d+'</span><span>'+esc(D.hotel.replace("（连住）",""))+(D.warn?'　<b style="color:var(--warn)">待确认</b>':'')+'</span></div>'}).join("");
+}
+
+/* ---------- expenses ---------- */
+var exps=load("gz-exp",[]),CATS=["吃喝","手信","门票/体验","交通","其他"],CCOL=["#1e8a6a","#c28d0e","#6a7fc2","#b4532a","#8a8f8c"],expCat=CATS[0];
+function renderCats(){$("expCats").innerHTML=CATS.map(function(c){return'<button aria-pressed="'+(c===expCat)+'">'+c+'</button>'}).join("");
+  $("expCats").querySelectorAll("button").forEach(function(b){b.onclick=function(){expCat=b.textContent;renderCats()}})}
+function renderExp(){
+  var tot=exps.reduce(function(s,e){return s+e.a},0);
+  $("expTotal").textContent=exps.length?"共 ¥"+tot.toFixed(0)+"，约 S$"+(tot/FX.sgd).toFixed(0):"";
+  if(!exps.length){$("expSum").innerHTML="";$("expList").innerHTML='<p class="small muted" style="margin:12px 0 0">还没记账。每花一笔就记下来，回家就知道这趟花了多少。</p>';return}
+  var by={};CATS.forEach(function(c){by[c]=0});exps.forEach(function(e){by[e.c]=(by[e.c]||0)+e.a});
+  $("expSum").innerHTML='<div class="sumbar">'+CATS.map(function(c,i){return by[c]?'<span style="width:'+(by[c]/tot*100)+'%;background:'+CCOL[i]+'"></span>':''}).join("")+'</div>'+
+    '<div class="legend">'+CATS.map(function(c,i){return by[c]?'<span><i style="background:'+CCOL[i]+'"></i>'+c+' ¥'+by[c].toFixed(0)+'</span>':''}).join("")+'</div>';
+  var days={};exps.forEach(function(e,i){(days[e.day]=days[e.day]||[]).push(i)});
+  var h='';Object.keys(days).sort(function(a,b){return b-a}).forEach(function(d){
+    var ids=days[d],sum=ids.reduce(function(s,i){return s+exps[i].a},0);
+    h+='<div class="dgroup"><h4><span>D'+d+'　11月'+(4+ +d)+'日</span><span class="num">¥'+sum.toFixed(0)+'</span></h4>';
+    ids.slice().reverse().forEach(function(i){var e=exps[i];h+='<div class="exp-item"><span>'+esc(e.c)+(e.n?'　<span class="muted">'+esc(e.n)+'</span>':'')+'</span><span class="num">¥'+e.a.toFixed(0)+'<button class="x" aria-label="删除" data-i="'+i+'">✕</button></span></div>'});
+    h+='</div>'});
+  $("expList").innerHTML=h;
+  $("expList").querySelectorAll(".x").forEach(function(b){b.onclick=function(){if(confirm("删除这笔？")){exps.splice(+b.dataset.i,1);save("gz-exp",exps);renderExp()}}});
+}
+$("expAdd").onclick=function(){var a=parseFloat($("expAmt").value);if(!(a>0)){$("expAmt").focus();return}
+  exps.push({a:a,c:expCat,n:$("expNote").value.trim(),day:Math.min(Math.max(todayIndex()+1,1),9)});
+  save("gz-exp",exps);$("expAmt").value="";$("expNote").value="";renderExp()};
+var notes=$("notes");notes.value=load("gz-notes","");notes.oninput=function(){save("gz-notes",notes.value)};
+
+/* ---------- routing ---------- */
+var VIEWS=["today","plan","pack","info","tools"];
+function route(keep){var v=(location.hash||"#today").slice(1);if(VIEWS.indexOf(v)<0)v="today";
+  VIEWS.forEach(function(x){$("v-"+x).classList.toggle("on",x===v)});
+  document.querySelectorAll("nav a").forEach(function(a){if(a.dataset.v===v)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  if(v==="today")renderToday();if(v==="plan")renderPlan();if(v==="pack")renderPack();if(v==="tools"){renderConv();renderExp()}
+  if(!keep)window.scrollTo(0,0)}
+window.addEventListener("hashchange",function(){route()});
+document.querySelectorAll("[data-focus]").forEach(function(a){a.addEventListener("click",function(){var id=a.dataset.focus;setTimeout(function(){var el=$(id);el.scrollIntoView({block:"center"});el.focus()},60)})});
+function netState(){$("offline").classList.toggle("on",!navigator.onLine);if(navigator.onLine){fetchWx();fetchFx()}route(true)}
+window.addEventListener("online",netState);window.addEventListener("offline",netState);
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&navigator.onLine){fetchWx();fetchFx()}});
+renderCats();route();netState();
+if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){})}
+</script>
+</body>
+</html>
